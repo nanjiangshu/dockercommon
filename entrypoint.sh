@@ -11,5 +11,16 @@ useradd --shell /bin/bash -u $USER_ID -o -c "" -m user
 export HOME=/home/user
 
 chown -R user:user /home/user
+IFS=':'; DIRLIST=($USER_DIRS); unset IFS;
+numDIR=${#DIRLIST[@]}
+
+for ((i=0;i<numDIR;i++));do
+    dir=${DIRLIST[$i]}
+    if [ -d "$dir" ];then
+        chown -R user:user $dir
+    else
+        echo "$dir does not exist"
+    fi
+done
 exec /usr/local/bin/gosu user "$@"
 
